@@ -21,6 +21,8 @@ To run this module in the terminal:
 
 node bamazonCustomer.js
 
+![Screen Shot 2019-11-20 at 5 06 22 PM](https://user-images.githubusercontent.com/49074642/69282416-48b60d80-0bb8-11ea-85cc-3f39b8b17795.png)
+
 Manager Module
 The manager module lets managers view the list of products, view low inventory, add inventory, and add products.
 
