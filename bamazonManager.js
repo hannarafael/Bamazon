@@ -21,6 +21,7 @@ function displayInventory(){
 		var theDisplayTable = new Table({
 			head: ['Item ID', 'Product Name', 'Category', 'Price', 'Quantity'],
 			colWidths: [10,25,25,10,14]
+			
 		});
 		for(i=0; i<res.length;i++){
 			theDisplayTable.push(
@@ -75,7 +76,7 @@ function restockRequest(){
 function restockInventory(id, quant){
 	connection.query('SELECT * FROM Products WHERE item_id = '+id, function(err,res){
 		if(err){console.log(err)};
-		connection.query('UPDATE Products SET stock_quantity = stock_quantity + ' +stock_quantity+ 'WHERE item_id =' +item_id);
+		connection.query("UPDATE Products SET stock_quantity = stock_quantity + "+stock_quantity+ "WHERE item_id =" +item_id);
 
 		displayInventory();
 	});
@@ -138,10 +139,10 @@ function addRequest(){
   };
 
   function removeInventory(id){
-  	connection.query('DELETE FROM Products WHERE item_id = ' + id);
+  	connection.query("DELETE FROM Products WHERE item_id = " + id);
   	displayInventory();
   };
 
   displayInventory();
 
-  connection.query(“UPDATE products SET stock_quantity = ” + res[0].stock_quantity - amtNeeded + “WHERE item_id = ” +ID);
+  connection.query("UPDATE products SET stock_quantity = " + res[0].stock_quantity - amtNeeded + "WHERE item_id = " +ID);

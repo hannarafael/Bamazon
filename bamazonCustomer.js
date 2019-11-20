@@ -19,11 +19,14 @@ connection.connect(function(err){
 var displayProducts = function(){
 	var query = "Select * FROM products";
 	connection.query(query, function(err, res){
-		if(err) throw err;
-		var displayTable = new Table ({
-			head: ["Item ID", "Product Name", "Catergory", "Price", "Quantity"],
-			colWidths: [10,25,25,10,14]
-		});
+	if(err) throw err;
+	if(res.length == 0){
+	   console.log("[*] Result is empty!");
+	}
+	var displayTable = new Table ({
+	head: ["Item ID", "Product Name", "Catergory", "Price", "Quantity"],
+	colWidths: [10,25,25,10,14]
+	});
 		for(var i = 0; i < res.length; i++){
 			displayTable.push(
 				[res[i].item_id,res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
@@ -31,6 +34,7 @@ var displayProducts = function(){
 		}
 		console.log(displayTable.toString());
 		purchasePrompt();
+		
 	});
 }
 
@@ -51,24 +55,28 @@ function purchasePrompt(){
 
  ]).then(function(answers){
  	var quantityNeeded = answers.Quantity;
- 	var IDrequested = answers.ID;
+	 var IDrequested = answers.ID;
+	 console.log(quantityNeeded);
  	purchaseOrder(IDrequested, quantityNeeded);
  });
 };
 
 function purchaseOrder(ID, amtNeeded){
-	connection.query('Select * FROM products WHERE item_id =' + ID, function(err,res){
+	console.log("[*] ID is  "+ID);
+	connection.query("SELECT * FROM products WHERE item_id =" + ID, function(err,res){
 		if(err){console.log(err)};
 		if(amtNeeded <= res[0].stock_quantity){
 			var totalCost = res[0].price * amtNeeded;
 			console.log("Good news your order is in stock!");
 			console.log("Your total cost for " + amtNeeded + " " +res[0].product_name + " is " + totalCost + " Thank you!");
-			connection.query("UPDATE products SET stock_quantity = " + res[0].stock_quantity - amtNeeded + "WHERE item_id = " +ID);
+			var val = res[0].stock_quantity - amtNeeded;
+			connection.query("UPDATE products SET stock_quantity = " + val + " WHERE item_id=" +ID);
+			console.log("[*] "+res[0].stock_quantity);
 			
 		} else{
 			console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
-		};
-		displayProducts();
+		}
+	
 	});
 };
 
